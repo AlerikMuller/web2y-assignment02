@@ -3,5 +3,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/web2y_assignment02/",
+  base: "/web2y-assignment02/",
 });

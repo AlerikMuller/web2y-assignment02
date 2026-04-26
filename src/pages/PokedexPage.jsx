@@ -3,7 +3,7 @@ import PokemonList from "../components/PokemonList";
 import PokemonDetails from "../components/PokemonDetails";
 import Pagination from "../components/Pagination";
 
-const LIMIT = 20;
+const LIMIT = 12;
 
 export default function PokedexPage() {
     const [pokemonList, setPokemonList] = useState([]);
@@ -54,6 +54,11 @@ export default function PokedexPage() {
 
             const data = await response.json();
             setSelectedPokemon(data);
+
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth",
+            });
         } catch (err) {
             setError(err.message);
         } finally {
@@ -77,31 +82,25 @@ export default function PokedexPage() {
 
             {error && <p className="error-message">{error}</p>}
 
-            <div className="pokedex-layout">
-                <div className="left-panel">
-                    <h2>Pokémon List</h2>
+            {loadingList ? (
+                <p>Loading Pokémon...</p>
+            ) : (
+                <PokemonList
+                    pokemon={pokemonList}
+                    onSelect={handleSelectPokemon}
+                    selectedPokemonName={selectedPokemon?.name}
+                />
+            )}
 
-                    {loadingList ? (
-                        <p>Loading Pokémon...</p>
-                    ) : (
-                        <PokemonList
-                            pokemon={pokemonList}
-                            onSelect={handleSelectPokemon}
-                            selectedPokemonName={selectedPokemon?.name}
-                        />
-                    )}
+            <Pagination
+                page={page}
+                onPrevious={handlePrevious}
+                onNext={handleNext}
+            />
 
-                    <Pagination
-                        page={page}
-                        onPrevious={handlePrevious}
-                        onNext={handleNext}
-                    />
-                </div>
-
-                <div className="right-panel">
-                    <h2>Details</h2>
-                    <PokemonDetails pokemon={selectedPokemon} loading={loadingDetails} />
-                </div>
+            <div className="details-section">
+                <h2>Selected Pokémon</h2>
+                <PokemonDetails pokemon={selectedPokemon} loading={loadingDetails} />
             </div>
         </section>
     );

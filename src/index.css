@@ -198,3 +198,27 @@ ul {
   font-weight: bold;
   color: #ef5350;
 }
+
+.page-jump-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-jump-input {
+  width: 70px;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.page-jump-form button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  background: #ef5350;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}

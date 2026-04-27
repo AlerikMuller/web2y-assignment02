@@ -7,6 +7,7 @@ const LIMIT = 12;
 export default function PokedexPage() {
     const [pokemonList, setPokemonList] = useState([]);
     const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
     const [loadingList, setLoadingList] = useState(false);
     const [error, setError] = useState("");
 
@@ -27,6 +28,7 @@ export default function PokedexPage() {
 
                 const data = await response.json();
                 setPokemonList(data.results);
+                setTotalPages(Math.ceil(data.count / LIMIT));
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -44,7 +46,15 @@ export default function PokedexPage() {
     }
 
     function handleNext() {
-        setPage(page + 1);
+        if (page < totalPages - 1) {
+            setPage(page + 1);
+        }
+    }
+
+    function handleGoToPage(targetPage) {
+        if (targetPage >= 0 && targetPage < totalPages) {
+            setPage(targetPage);
+        }
     }
 
     return (
@@ -61,8 +71,10 @@ export default function PokedexPage() {
 
             <Pagination
                 page={page}
+                totalPages={totalPages}
                 onPrevious={handlePrevious}
                 onNext={handleNext}
+                onGoToPage={handleGoToPage}
             />
         </section>
     );

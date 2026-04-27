@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const typeColors = {
     grass: "#8BCB7B",
@@ -25,8 +26,9 @@ function capitalize(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-export default function PokemonList({ pokemon, onSelect, selectedPokemonName }) {
+export default function PokemonList({ pokemon }) {
     const [pokemonDetails, setPokemonDetails] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         let ignore = false;
@@ -46,7 +48,6 @@ export default function PokemonList({ pokemon, onSelect, selectedPokemonName }) 
                             id: data.id,
                             sprite,
                             primaryType: data.types?.[0]?.type?.name || "normal",
-                            url: item.url,
                         };
                     })
                 );
@@ -75,11 +76,9 @@ export default function PokemonList({ pokemon, onSelect, selectedPokemonName }) 
             {pokemonDetails.map((item) => (
                 <button
                     key={item.name}
-                    className={`pokemon-card ${
-                        selectedPokemonName === item.name ? "selected-card" : ""
-                    }`}
+                    className="pokemon-card"
                     style={{ backgroundColor: typeColors[item.primaryType] || "#cccccc" }}
-                    onClick={() => onSelect({ name: item.name, url: item.url })}
+                    onClick={() => navigate(`/pokemon/${item.name}`)}
                 >
                     <div className="pokemon-card-text">
                         <span className="pokemon-number">#{item.id}</span>

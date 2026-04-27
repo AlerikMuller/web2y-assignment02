@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import PokemonList from "../components/PokemonList";
-import PokemonDetails from "../components/PokemonDetails";
 import Pagination from "../components/Pagination";
 
 const LIMIT = 12;
 
 export default function PokedexPage() {
     const [pokemonList, setPokemonList] = useState([]);
-    const [selectedPokemon, setSelectedPokemon] = useState(null);
     const [page, setPage] = useState(0);
     const [loadingList, setLoadingList] = useState(false);
-    const [loadingDetails, setLoadingDetails] = useState(false);
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -30,7 +27,6 @@ export default function PokedexPage() {
 
                 const data = await response.json();
                 setPokemonList(data.results);
-                setSelectedPokemon(null);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -38,33 +34,8 @@ export default function PokedexPage() {
             }
         }
 
-        fetchPokemonPage();
+        void fetchPokemonPage();
     }, [page]);
-
-    async function handleSelectPokemon(pokemon) {
-        try {
-            setLoadingDetails(true);
-            setError("");
-
-            const response = await fetch(pokemon.url);
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch Pokémon details.");
-            }
-
-            const data = await response.json();
-            setSelectedPokemon(data);
-
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: "smooth",
-            });
-        } catch (err) {
-            setError(err.message);
-        } finally {
-            setLoadingDetails(false);
-        }
-    }
 
     function handlePrevious() {
         if (page > 0) {
@@ -85,11 +56,7 @@ export default function PokedexPage() {
             {loadingList ? (
                 <p>Loading Pokémon...</p>
             ) : (
-                <PokemonList
-                    pokemon={pokemonList}
-                    onSelect={handleSelectPokemon}
-                    selectedPokemonName={selectedPokemon?.name}
-                />
+                <PokemonList pokemon={pokemonList} />
             )}
 
             <Pagination
@@ -97,11 +64,6 @@ export default function PokedexPage() {
                 onPrevious={handlePrevious}
                 onNext={handleNext}
             />
-
-            <div className="details-section">
-                <h2>Selected Pokémon</h2>
-                <PokemonDetails pokemon={selectedPokemon} loading={loadingDetails} />
-            </div>
         </section>
     );
 }

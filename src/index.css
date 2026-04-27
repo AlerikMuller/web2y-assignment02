@@ -191,3 +191,10 @@ ul {
     grid-template-columns: 1fr;
   }
 }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #ef5350;
+}
